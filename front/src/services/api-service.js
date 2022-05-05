@@ -17,4 +17,12 @@ export default class ApiService {
     }
     return await res.json();
   }
+
+  async getProduct(url) {
+    const res = await fetch(`${this._urlBase}${url}`);
+    if (!res.ok) {
+      throw new Error(`bad!!!`);
+    }
+    return await res.json();
+  }
 }

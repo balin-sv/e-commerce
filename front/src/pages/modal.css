@@ -1,0 +1,9 @@
+.modal-dialog {
+  display: flex;
+  flex-direction: row;
+
+  height: 100vh;
+
+  width: 60vw;
+  min-height: 100%;
+}

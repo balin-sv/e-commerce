@@ -1,3 +1,15 @@
 .card {
   width: 18rem;
+  background-color: white;
+  color: rgb(54, 51, 51);
+}
+
+.img {
+  width: 100%;
+  height: 300px;
+  object-fit: contain;
+}
+
+.bold {
+  font-weight: bold;
 }

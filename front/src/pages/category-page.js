@@ -3,23 +3,45 @@ import { useParams } from "react-router-dom";
 import ApiService from "../services/api-service";
 import CardsContainer from "../components/cards-container/cards-container";
 import Card from "../components/card";
+import Modal from "./modal";
+import { useOutletContext } from "react-router-dom";
 
 function CategoryPage() {
   const apiService = new ApiService();
   const { category } = useParams("");
   const [products, setProducts] = useState([]);
+  const [isModal, setIsModal] = useState(false);
+  const [modalInfo, setModalInfo] = useState();
+  const { setIsLoaded } = useOutletContext();
+
+  const onSetModalInfo = (info) => {
+    console.log("in", info);
+    setModalInfo(info);
+  };
+
+  const onSetModal = (value) => {
+    setIsModal(value);
+  };
 
   useEffect(() => {
+    let mounted = true;
+    setIsLoaded(true);
     (async () => {
       try {
         const res = await apiService.getCategory(
           `/products/category/${category}`
         );
-        setProducts(res);
+        if (mounted) {
+          setProducts(res);
+          setTimeout(() => {
+            setIsLoaded(false);
+          }, 500);
+        }
       } catch (error) {
         console.log(error);
       }
     })();
+    return () => (mounted = false);
   }, [category]);
 
   const productsCollection = products.map((product) => (
@@ -31,14 +53,27 @@ function CategoryPage() {
       price={product.price}
       description={product.description}
       image={product.image}
+      onSetModalInfo={onSetModalInfo}
+      onSetModal={onSetModal}
     />
   ));
 
   return (
     <>
-      <div>CategoryPage</div>
+      <h1 className="d-flex justify-content-center mt-3">{category}</h1>
       <div>
         <CardsContainer items={productsCollection} />
+      </div>
+      <div>
+        {isModal === true ? (
+          <Modal
+            modalInfo={modalInfo}
+            onSetModal={onSetModal}
+            isModal={isModal}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
