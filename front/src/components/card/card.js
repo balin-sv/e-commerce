@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ItemCount from "../item-count";
+import { CartContext } from "../../context/cart-context";
 import "./card.css";
 
 const Card = ({
@@ -13,6 +14,39 @@ const Card = ({
   onSetModalInfo,
   onSetModal,
 }) => {
+  const [count, setCount] = useState(0);
+  const value = useContext(CartContext);
+
+  function increnemt() {
+    if (count !== 10) {
+      setCount(count + 1);
+      value.addItem({ category, id, title, price });
+    }
+  }
+
+  function decrement() {
+    if (count !== 0) {
+      setCount(count - 1);
+      value.removeItem(id, category);
+    }
+  }
+
+  // const goToCart = (data, count, startDate) => {
+  //   const newObj = {
+  //     id: value.generateItemID(),
+  //     data: data,
+  //     price: data.price,
+  //     qty: count,
+  //     date: startDate,
+  //     total: (function () {
+  //       return data.price * count;
+  //     })(),
+  //   };
+
+  //   value.addItem(newObj);
+  //   navigate("/cart");
+  // };
+
   const navigate = useNavigate();
   const goToItem = () => {
     navigate(`/${category}`);
@@ -48,7 +82,11 @@ const Card = ({
             <h5 class="card-title">{title}</h5>
             <h5 class="bold card-title">{`Price ${price} $`}</h5>
             <div className="d-flex justify-content-center">
-              <ItemCount />
+              <ItemCount
+                count={count}
+                increnemt={increnemt}
+                decrement={decrement}
+              />
             </div>
           </div>
         ) : (

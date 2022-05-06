@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { CartContext } from "../../context/cart-context";
+
 import "./cart-widget.css";
 
 const CartWidget = () => {
-  // const { items } = useContext(CartContext);
-  const [value, setValue] = useState(0);
+  const value = useContext(CartContext);
 
   return (
     <div style={{ position: "relative", marginLeft: 6 }}>
@@ -27,7 +28,7 @@ const CartWidget = () => {
           borderRadius: "20%",
         }}
       >
-        {value}
+        {value.items.length}
       </div>
     </div>
   );

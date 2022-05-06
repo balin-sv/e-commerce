@@ -7,22 +7,19 @@ export const CartContext = createContext();
 //component
 export const CartProvider = ({ children }) => {
   const [items, setItems] = useState([]);
-  const [id, setId] = useState(0);
-  const [isAdded, setIsAdded] = useState(false);
+
   const addItem = (item) => {
     setItems((prevArray) => [...prevArray, item]);
   };
 
-  const generateItemID = () => {
-    setId(id + 1);
-    return id;
-  };
-
-  const removeItem = (id) => {
-    const newArray = items.filter((item) => {
-      return item.id !== id;
-    });
-    setItems(newArray);
+  const removeItem = (id, category) => {
+    let index = items.findIndex(
+      (item) => item.id == id && item.category == category
+    );
+    const firstPart = items.slice(0, index);
+    const secondPart = items.slice(index + 1);
+    const newArr = [...firstPart, ...secondPart];
+    setItems(newArr);
   };
 
   return (
@@ -32,9 +29,6 @@ export const CartProvider = ({ children }) => {
         setItems,
         addItem,
         removeItem,
-        generateItemID,
-        isAdded,
-        setIsAdded,
       }}
     >
       {children}
